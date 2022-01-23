@@ -1,5 +1,8 @@
 const registerServiceWorker = async () => {
   const swRegistration = await navigator.serviceWorker.register("service-worker.js");
+  if(!swRegistration){
+    logError("Service worker not registered");
+  }
   return swRegistration;
 };
 
@@ -10,8 +13,7 @@ const requestNotificationPermission = async () => {
   // default: user has dismissed the notification permission popup by clicking on x
   // denied: user has denied the request.
   if (permission !== 'granted') {
-    alert('Permission not granted for Notification')
-    throw new Error('Permission not granted for Notification')
+    logError('Permission not granted for Notification');
   }
 }
 
@@ -33,8 +35,10 @@ const addEventListenerForButton = () => {
     console.log("button clicked");
     Notification.requestPermission().then((result) => {
       if (result === "granted") {
-        console.log("granted");
         showNotification();
+      }
+      else{
+        logInfo("Permision is not granted")
       }
     });
   });
@@ -42,14 +46,24 @@ const addEventListenerForButton = () => {
 
 const checkBrowserCompatibility = () => {
   if (!("serviceWorker" in navigator)) {
-    throw new Error("No Service Worker support!");
+    logError("No Service Worker support!");
   }
   if (!("PushManager" in window)) {
-    throw new Error("No Push API Support!");
+    logError("No Push API Support!");
   }
 };
 
+function logError(msg){
+  alert(msg);
+  throw new Error(msg);
+}
+
+function logInfo(msg){
+  alert(msg);
+}
+
 function showNotification() {
+  logInfo("notification will be shown");
   try {
     const options = {
       body: "body",
@@ -57,7 +71,7 @@ function showNotification() {
     };
     const n = new Notification("Here is notification", options);
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 }
 
