@@ -1,5 +1,9 @@
+import { logInfo, logError } from "./common.js";
+
 const registerServiceWorker = async () => {
-  const swRegistration = await navigator.serviceWorker.register("service-worker.js");
+  const swRegistration = await navigator.serviceWorker.register("service-worker.js", {
+    type: 'module',
+  });
   if(!swRegistration){
     logError("Service worker not registered");
   }
@@ -53,14 +57,6 @@ const checkBrowserCompatibility = () => {
   }
 };
 
-function logError(msg){
-  alert(msg);
-  throw new Error(msg);
-}
-
-function logInfo(msg){
-  alert(msg);
-}
 
 function showNotification() {
   logInfo("notification will be shown");
