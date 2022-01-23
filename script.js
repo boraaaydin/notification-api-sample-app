@@ -58,17 +58,34 @@ const checkBrowserCompatibility = () => {
 };
 
 
+// function showNotification() {
+//   logInfo("notification will be shown");
+//   try {
+//     const options = {
+//       body: "body",
+//       icon: "https://www.iconninja.com/files/926/373/306/link-chain-url-web-permalink-web-address-icon.png",
+//     };
+//     const n = new Notification("Here is notification", options);
+//   } catch (error) {
+//     logError(error);
+//   }
+// }
+
+
 function showNotification() {
-  logInfo("notification will be shown");
-  try {
-    const options = {
-      body: "body",
-      icon: "https://www.iconninja.com/files/926/373/306/link-chain-url-web-permalink-web-address-icon.png",
-    };
-    const n = new Notification("Here is notification", options);
-  } catch (error) {
-    logError(error);
-  }
+  Notification.requestPermission(function(result) {
+    if (result === 'granted') {
+      navigator.serviceWorker.ready.then(function(registration) {
+        console.log("serviceWorker");
+        registration.showNotification('Vibration Sample', {
+          body: 'Buzz! Buzz!',
+          icon: 'https://www.iconninja.com/files/926/373/306/link-chain-url-web-permalink-web-address-icon.png',
+          // vibrate: [200, 100, 200, 100, 200, 100, 200],
+          // tag: 'vibration-sample'
+        });
+      });
+    }
+  });
 }
 
 const main = async () => {
